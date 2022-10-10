@@ -14,10 +14,10 @@ services:
         tail -f /dev/null
     environment:
       DOMAIN: ${DOMAIN}
-      BOOTSTRAP_URL: ${BOOTSTRAP_URL}
+      BOOTSTRAP_URL: "${BOOTSTRAP_URL}:9092"
       KAFKA_USERNAME: ${KAFKA_USERNAME}
       KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-      SCHEMA_URL: ${SCHEMA_URL}
+      SCHEMA_URL: "https://${SCHEMA_URL}"
       SCHEMA_USERNAME: ${SCHEMA_USERNAME}
       SCHEMA_PASSWORD: ${SCHEMA_PASSWORD}
     volumes:
@@ -25,28 +25,108 @@ services:
     networks:
       - no-internet
     links:
-      - proxy:pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b0-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b1-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b2-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b3-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b4-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b5-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b6-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b7-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b8-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b9-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b10-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b11-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b12-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b13-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b14-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b15-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b16-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b17-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b18-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b19-pkc-ymrq7.us-east-2.aws.confluent.cloud
-      - proxy:b20-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:${BOOTSTRAP_URL}
+      - proxy:${SCHEMA_URL}
+      - proxy:b0-${BOOTSTRAP_URL}
+      - proxy:b1-${BOOTSTRAP_URL}
+      - proxy:b2-${BOOTSTRAP_URL}
+      - proxy:b3-${BOOTSTRAP_URL}
+      - proxy:b4-${BOOTSTRAP_URL}
+      - proxy:b5-${BOOTSTRAP_URL}
+      - proxy:b6-${BOOTSTRAP_URL}
+      - proxy:b7-${BOOTSTRAP_URL}
+      - proxy:b8-${BOOTSTRAP_URL}
+      - proxy:b9-${BOOTSTRAP_URL}
+      - proxy:b10-${BOOTSTRAP_URL}
+      - proxy:b11-${BOOTSTRAP_URL}
+      - proxy:b12-${BOOTSTRAP_URL}
+      - proxy:b13-${BOOTSTRAP_URL}
+      - proxy:b14-${BOOTSTRAP_URL}
+      - proxy:b15-${BOOTSTRAP_URL}
+      - proxy:b16-${BOOTSTRAP_URL}
+      - proxy:b17-${BOOTSTRAP_URL}
+      - proxy:b18-${BOOTSTRAP_URL}
+      - proxy:b19-${BOOTSTRAP_URL}
+      - proxy:b20-${BOOTSTRAP_URL}
+      - proxy:b21-${BOOTSTRAP_URL}
+      - proxy:b22-${BOOTSTRAP_URL}
+      - proxy:b23-${BOOTSTRAP_URL}
+      - proxy:b24-${BOOTSTRAP_URL}
+      - proxy:b25-${BOOTSTRAP_URL}
+      - proxy:b26-${BOOTSTRAP_URL}
+      - proxy:b27-${BOOTSTRAP_URL}
+      - proxy:b28-${BOOTSTRAP_URL}
+      - proxy:b29-${BOOTSTRAP_URL}
+      - proxy:b30-${BOOTSTRAP_URL}
+      - proxy:b31-${BOOTSTRAP_URL}
+      - proxy:b32-${BOOTSTRAP_URL}
+      - proxy:b33-${BOOTSTRAP_URL}
+      - proxy:b34-${BOOTSTRAP_URL}
+      - proxy:b35-${BOOTSTRAP_URL}
+      - proxy:b36-${BOOTSTRAP_URL}
+      - proxy:b37-${BOOTSTRAP_URL}
+      - proxy:b38-${BOOTSTRAP_URL}
+      - proxy:b39-${BOOTSTRAP_URL}
+      - proxy:b40-${BOOTSTRAP_URL}
+      - proxy:b41-${BOOTSTRAP_URL}
+      - proxy:b42-${BOOTSTRAP_URL}
+      - proxy:b43-${BOOTSTRAP_URL}
+      - proxy:b44-${BOOTSTRAP_URL}
+      - proxy:b45-${BOOTSTRAP_URL}
+      - proxy:b46-${BOOTSTRAP_URL}
+      - proxy:b47-${BOOTSTRAP_URL}
+      - proxy:b48-${BOOTSTRAP_URL}
+      - proxy:b49-${BOOTSTRAP_URL}
+      - proxy:b50-${BOOTSTRAP_URL}
+      - proxy:b51-${BOOTSTRAP_URL}
+      - proxy:b52-${BOOTSTRAP_URL}
+      - proxy:b53-${BOOTSTRAP_URL}
+      - proxy:b54-${BOOTSTRAP_URL}
+      - proxy:b55-${BOOTSTRAP_URL}
+      - proxy:b56-${BOOTSTRAP_URL}
+      - proxy:b57-${BOOTSTRAP_URL}
+      - proxy:b58-${BOOTSTRAP_URL}
+      - proxy:b59-${BOOTSTRAP_URL}
+      - proxy:b60-${BOOTSTRAP_URL}
+      - proxy:b61-${BOOTSTRAP_URL}
+      - proxy:b62-${BOOTSTRAP_URL}
+      - proxy:b63-${BOOTSTRAP_URL}
+      - proxy:b64-${BOOTSTRAP_URL}
+      - proxy:b65-${BOOTSTRAP_URL}
+      - proxy:b66-${BOOTSTRAP_URL}
+      - proxy:b67-${BOOTSTRAP_URL}
+      - proxy:b68-${BOOTSTRAP_URL}
+      - proxy:b69-${BOOTSTRAP_URL}
+      - proxy:b70-${BOOTSTRAP_URL}
+      - proxy:b71-${BOOTSTRAP_URL}
+      - proxy:b72-${BOOTSTRAP_URL}
+      - proxy:b73-${BOOTSTRAP_URL}
+      - proxy:b74-${BOOTSTRAP_URL}
+      - proxy:b75-${BOOTSTRAP_URL}
+      - proxy:b76-${BOOTSTRAP_URL}
+      - proxy:b77-${BOOTSTRAP_URL}
+      - proxy:b78-${BOOTSTRAP_URL}
+      - proxy:b79-${BOOTSTRAP_URL}
+      - proxy:b80-${BOOTSTRAP_URL}
+      - proxy:b81-${BOOTSTRAP_URL}
+      - proxy:b82-${BOOTSTRAP_URL}
+      - proxy:b83-${BOOTSTRAP_URL}
+      - proxy:b84-${BOOTSTRAP_URL}
+      - proxy:b85-${BOOTSTRAP_URL}
+      - proxy:b86-${BOOTSTRAP_URL}
+      - proxy:b87-${BOOTSTRAP_URL}
+      - proxy:b88-${BOOTSTRAP_URL}
+      - proxy:b89-${BOOTSTRAP_URL}
+      - proxy:b90-${BOOTSTRAP_URL}
+      - proxy:b91-${BOOTSTRAP_URL}
+      - proxy:b92-${BOOTSTRAP_URL}
+      - proxy:b93-${BOOTSTRAP_URL}
+      - proxy:b94-${BOOTSTRAP_URL}
+      - proxy:b95-${BOOTSTRAP_URL}
+      - proxy:b96-${BOOTSTRAP_URL}
+      - proxy:b97-${BOOTSTRAP_URL}
+      - proxy:b98-${BOOTSTRAP_URL}
+      - proxy:b99-${BOOTSTRAP_URL}
     healthcheck:
       test: ["CMD", "bash", "-c", "find /tmp/initialized"]
       start_period: 60s
@@ -55,7 +135,7 @@ services:
       retries: 30
 
   proxy:
-    image: nginx:${NGINX_VERSION}
+    image: ubuntu/nginx:latest 
     hostname: proxy
     container_name: proxy
     volumes:
@@ -64,6 +144,16 @@ services:
     networks:
       - internet
       - no-internet
+
+#  tcpdump:
+#    image: nicolaka/netshoot
+#    container_name: tcpdump
+#    depends_on:
+#      - proxy
+#    command: tcpdump -i eth0 port 9092 -Xv
+#    volumes:
+#      - ./volumes/tcpdump:/data
+#    network_mode: container:proxy
 
 networks:
   internet: {}

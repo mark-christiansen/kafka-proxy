@@ -7,4 +7,4 @@ cd ${BASE}
 [[ -z "$1" ]] && { echo "Consumer group not specified" ; exit 1; }
 GROUP=$1
 
-kafka-consumer-groups --bootstrap-server $BOOTSTRAP_URL --command-config $KAFKA_CONFIG --describe --group $GROUP --timeout 100000
+kafka-consumer-groups --bootstrap-server $BOOTSTRAP_URL --command-config $KAFKA_CONFIG --describe --group $GROUP --timeout 10000 --verbose

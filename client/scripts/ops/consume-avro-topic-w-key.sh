@@ -13,8 +13,8 @@ GROUP=$2
 export LOG_DIR="/tmp"
 export SCHEMA_REGISTRY_LOG4J_LOGGERS="org.apache.kafka.clients.consumer=OFF"
 
-echo "| KEY | VALUE | HEADERS | SCHEMA_ID |"
-kafka-avro-console-consumer -bootstrap-server $BOOTSTRAP_URL \
---property print.schema.ids=true --property schema.id.separator=" | " \
---property print.key=true --property key.separator=" | " --property key.deserializer=org.apache.kafka.common.serialization.LongDeserializer \
---property schema.registry.url=$SCHEMA_URL --topic $TOPIC --group $GROUP --from-beginning
+echo "| KEY | SCHEMA_ID | VALUE | SCHEMA_ID | HEADERS"
+kafka-avro-console-consumer -bootstrap-server $BOOTSTRAP_URL --consumer.config $KAFKA_CONFIG \
+--property print.schema.ids=true --property schema.id.separator=" | " --property print.key=true \
+--property key.separator=" | " --property schema.registry.url=$SCHEMA_URL --property basic.auth.credentials.source=USER_INFO \
+--property basic.auth.user.info=$SCHEMA_USERNAME:$SCHEMA_PASSWORD --topic $TOPIC --group $GROUP --from-beginning

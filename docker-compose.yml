@@ -1,0 +1,72 @@
+version: '3.x'
+services:
+
+  client:
+    image: kafka-client:0.0.2
+    build: ./client
+    hostname: client.${DOMAIN}
+    container_name: client
+    command:
+      - bash
+      - -c
+      - |
+        touch /tmp/initialized
+        tail -f /dev/null
+    environment:
+      DOMAIN: ${DOMAIN}
+      BOOTSTRAP_URL: ${BOOTSTRAP_URL}
+      KAFKA_USERNAME: ${KAFKA_USERNAME}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      SCHEMA_URL: ${SCHEMA_URL}
+      SCHEMA_USERNAME: ${SCHEMA_USERNAME}
+      SCHEMA_PASSWORD: ${SCHEMA_PASSWORD}
+    volumes:
+      - ./client/scripts:/scripts:ro
+    networks:
+      - no-internet
+    links:
+      - proxy:pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b0-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b1-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b2-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b3-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b4-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b5-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b6-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b7-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b8-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b9-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b10-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b11-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b12-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b13-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b14-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b15-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b16-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b17-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b18-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b19-pkc-ymrq7.us-east-2.aws.confluent.cloud
+      - proxy:b20-pkc-ymrq7.us-east-2.aws.confluent.cloud
+    healthcheck:
+      test: ["CMD", "bash", "-c", "find /tmp/initialized"]
+      start_period: 60s
+      interval: 15s
+      timeout: 15s
+      retries: 30
+
+  proxy:
+    image: nginx:${NGINX_VERSION}
+    hostname: proxy
+    container_name: proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl-conf:/etc/nginx/ssl-conf:ro
+    networks:
+      - internet
+      - no-internet
+
+networks:
+  internet: {}
+  no-internet:
+    name: ${DOMAIN}
+    internal: true

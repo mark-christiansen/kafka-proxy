@@ -7,4 +7,4 @@ cd ${BASE}
 [[ -z "$1" ]] && { echo "Topic not specified" ; exit 1; }
 TOPIC=$1
 
-kafka-topics -bootstrap-server $BOOTSTRAP_URL --delete --topic $TOPIC
+kafka-topics --bootstrap-server $BOOTSTRAP_URL --command-config $KAFKA_CONFIG --delete --topic $TOPIC

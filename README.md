@@ -2,9 +2,9 @@
 
 ## Summary
 
-This project is an example of using a forward proxy by Kafka clients to connect to [Confluent Cloud](https://www.confluent.io/confluent-cloud). Organizations may do this if they don't have permission to connect directly to Confluent Cloud from their internal network. The example is implemented using docker-compose to launch a [Kafka client](https://docs.confluent.io/platform/current/clients/index.html) in a network that cannot access the internet, and an [Nginx proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) that can access the internet (and thus access [Confluent Cloud](https://www.confluent.io/confluent-cloud)). Then, the [Confluent Cloud](https://www.confluent.io/confluent-cloud) DNS entries for bootstrapping to the brokers and connecting to the [Schema Registry](https://docs.confluent.io/platform/current/schema-registry/index.html) are overridden in the Kafka client's network by using Docker [links](https://docs.docker.com/network/links/). The links override the DNS values for the bootstrap URL and [Schema Registry](https://docs.confluent.io/platform/current/schema-registry/index.html) to point to the [Nginx proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/). 
+This project is an example of Kafka clients using a forward proxy to connect to [Confluent Cloud](https://www.confluent.io/confluent-cloud). Organizations may do this when they don't have permission to connect directly to Confluent Cloud from their internal network. The example is implemented using [Docker Compose](https://docs.docker.com/compose/compose-file/compose-file-v3/) to launch a [Kafka client](https://docs.confluent.io/platform/current/clients/index.html) in a network that cannot access the internet, and an [Nginx proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) that can access the internet (and thus access [Confluent Cloud](https://www.confluent.io/confluent-cloud)). [Confluent Cloud](https://www.confluent.io/confluent-cloud) DNS entries for bootstrapping to the brokers and connecting to the [Schema Registry](https://docs.confluent.io/platform/current/schema-registry/index.html) are overridden in the Kafka client's network by using Docker [links](https://docs.docker.com/network/links/). The links override the DNS values for the bootstrap URL and [Schema Registry](https://docs.confluent.io/platform/current/schema-registry/index.html) to point to the [Nginx proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) in the Kafka client's network. 
 
-The Kafka client is implemented as a Docker image built from an [OpenJDK image](https://hub.docker.com/_/openjdk) that contains the [Confluent Platform](https://docs.confluent.io/platform/current/installation/installing_cp/zip-tar.html) downloaded inside the image. Scripts are added to use the `kafka-topics`, `kafka-consumer-groups`, `kafka-avro-console-consumer` and `kafka-avro-console-producer` to communicate to Confluent Cloud to execute operations like creating topics, deleting topics, consuming messages, and producing messages to Confluent Cloud. This Docker image is built by docker-compose when you load the environment.
+The Kafka client is a Docker image built from an [OpenJDK image](https://hub.docker.com/_/openjdk) that contains the [Confluent Platform](https://docs.confluent.io/platform/current/installation/installing_cp/zip-tar.html). Scripts are added to use the `kafka-topics`, `kafka-consumer-groups`, `kafka-avro-console-consumer` and `kafka-avro-console-producer` shell scripts from Confluent Platform to communicate to Confluent Cloud, executing operations like creating topics, deleting topics, consuming messages, and producing messages. This Docker image is built by docker-compose when  running `docker-compose up -d`.
 
 ## Requirements
 
@@ -50,7 +50,7 @@ First, verify that the client cannot connect to the internet by executing `curl 
 % curl http://www.google.com
 curl: (6) Could not resolve host: www.google.com
 ```
-Then when inside the client, execute `cd /scripts/ops` to change to the operational scripts directory. These scripts will use a Kafka configuration file located at `/conf/kafka.properties` and environment varaibles (execute `export` to see these environment variables). To run a test execute the following commands to test topic creation, producing to a topic with [Avro](https://avro.apache.org/) messages, and consuming from a topic with [Avro](https://avro.apache.org/) messages. Using [Avro](https://avro.apache.org/) will cause the clients to publish and pull schemas from the Schema Registry to test that connectivity.
+Then when inside the client, execute `cd /scripts/ops` to change to the operational scripts directory. These scripts will use a Kafka configuration file located at `/conf/kafka.properties` and environment variables (execute `export` to see these environment variables). To run a test, execute the following commands to test topic creation, producing to a topic with [Avro](https://avro.apache.org/) messages, and consuming from a topic with [Avro](https://avro.apache.org/) messages. Using [Avro](https://avro.apache.org/) will cause the clients to publish and retrieve schemas from the Schema Registry to test that connectivity.
 ```
 % ./create-topic.sh avro-test 5
 
@@ -101,7 +101,7 @@ If you see these results, you have successfully communicated to Confluent Cloud 
 
 ## Nginx Proxy
 
-The Nginx proxy is the [Ubuntu image](https://hub.docker.com/r/ubuntu/nginx) because the [official Nginx image](https://hub.docker.com/_/nginx) does not contain the module `ngx_stream_module.so`. I could have built a custom Docker image from this version and added this module but I chose this route because it was quicker. For a long term implementation I would definitely build a custom image from the [official Nginx image](https://hub.docker.com/_/nginx). The container loads up the file `nginx.conf` from the base of this project. It should be configured like shown below.
+The Nginx proxy is using the [Ubuntu image](https://hub.docker.com/r/ubuntu/nginx) because the [official Nginx image](https://hub.docker.com/_/nginx) does not contain the module `ngx_stream_module.so`. The proxy could have used a custom Docker image extending the [official Nginx image](https://hub.docker.com/_/nginx) which adds this module, but I chose the [Ubuntu image](https://hub.docker.com/r/ubuntu/nginx) because it was quicker. For a long term implementation, I would definitely build a custom image from the [official Nginx image](https://hub.docker.com/_/nginx). The proxy container loads up the file `nginx.conf` from the base of this project. It is configured as shown below.
 ```
 load_module '/usr/lib/nginx/modules/ngx_stream_module.so';
 
@@ -134,7 +134,7 @@ stream {
  }
 }
 ```
-There are two `servers` listening to port `9092` (Kafka Brokers) and `443` (Schema Registry). These will forward all traffic to these ports to Confluent Cloud because the proxy is in a network that has access to the network and does not have the Confluent Cloud DNS entries redirected to the proxy. Another interesting part of this configuration is the `resolver` which points at Docker's internal DNS server at `127.0.0.11`.
+There are two `servers` listening to port `9092` (Kafka Brokers) and `443` (Schema Registry). These will forward all traffic to these ports (from Kafka client) to Confluent Cloud because the proxy is in a network that has access to the internet and does not have Confluent Cloud DNS entries redirected to the proxy. Another interesting part of this configuration is the `resolver` which points at Docker's internal DNS server at `127.0.0.11`.
 
 ## Stop and Teardown
 
